@@ -46,7 +46,7 @@ function restrict(){
             }
 
             // if we reach this point, the user is authenticated!
-            next()
+            next() // next will allow us to move on to the next middleware function. 
         } catch(err) {
             next(err)
         }
