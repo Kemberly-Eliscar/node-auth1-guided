@@ -6,7 +6,7 @@
 // write a try, catch error
 
 const bcrypt = require("bcryptjs")
-const Users = require('../database/config')
+const Users = require('../users/users-model')
 
 
 
@@ -27,6 +27,7 @@ function restrict(){
             if (!username || !password) {
                 return res.status(401).json(authError)
             }
+            console.log("checkpoint 1")
 
             // next thing we need to do is get the user from the database
             // import user's model up top
@@ -37,6 +38,7 @@ function restrict(){
             if (!user){
                 return res.status(401).json(authError)
             }
+            console.log("checkpoint 2")
 
             const passwordValid = await bcrypt.compare(password, user.password)
 
@@ -44,6 +46,7 @@ function restrict(){
             if (!passwordValid) {
                 return res.status(401).json(authError)
             }
+            console.log("checkpoint 3")
 
             // if we reach this point, the user is authenticated!
             next() // next will allow us to move on to the next middleware function. 
