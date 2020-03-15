@@ -26,9 +26,15 @@ router.post("/login", async (req, res, next) => {
 	try {
 		const { username, password } = req.body
 		const user = await Users.findBy({ username }).first()
-		const hash = await bcrypt.hash(password, 10)
+		// const hash = await bcrypt.hash(password, 10)
 
-		if (!user || hash !== user.password) {
+		// since bcrypt hashes generate different results due to the salting,
+		// we rely on the magic internals to compare hashes rather than doing it
+		// manually with "!=="
+		const passwordValid = await bcrypt.compare(password, user.password)
+
+		//if the user is true then we authenticate and if it is invalid we return an error message.
+		if (!user || !passwordValid) {
 			return res.status(401).json({
 				message: "Invalid Credentials",
 			})
